@@ -1,9 +1,11 @@
 {
-    "name": "application-name"
-  , "version": "0.0.1"
+    "name": "hbfav"
+  , "version": "0.0.2"
   , "private": true
   , "dependencies": {
       "express": "2.4.6"
-    , "ejs": ">= 0.0.1"
+    , "xml2js": ">= 0.0.1"
+    , "underscore": ">= 0.0.1"
+    , "request": ">= 0.0.1"
   }
 }
