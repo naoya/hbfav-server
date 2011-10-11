@@ -50,7 +50,7 @@ rss2timeline = (url, cb) ->
     cb new Timeline result
 
   request url, (error, response, body) ->
-    console.log "[#{response.statusCode}] #{url}"
+    # console.log "[#{response.statusCode}] #{url}"
     if not error and response.statusCode is 200
       try
         parser.parseString body
@@ -70,5 +70,5 @@ app.get "/:id/bookmark", (req, res) ->
   rss2timeline url, (timeline) ->
     res.send timeline
 
-app.listen 3000
+app.listen process.env.PORT || 3000
 console.log "Express server listening on port %d in %s mode", app.address().port, app.settings.env
