@@ -58,7 +58,6 @@
       return cb(new Timeline(result));
     });
     return request(url, function(error, response, body) {
-      console.log("[" + response.statusCode + "] " + url);
       if (!error && response.statusCode === 200) {
         try {
           return parser.parseString(body);
@@ -84,6 +83,6 @@
       return res.send(timeline);
     });
   });
-  app.listen(3000);
+  app.listen(process.env.PORT || 3000);
   console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
 }).call(this);
