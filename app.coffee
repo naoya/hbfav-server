@@ -58,15 +58,20 @@ rss2timeline = (url, cb) ->
         # console.log response.statusCode
         console.log e
 
+toEpoch = (date) ->
+  parseInt date.getTime() / 1000.0
+
 app.get "/:id", (req, res) ->
   offset = req.param('of') ? 0
-  url = "http://b.hatena.ne.jp/#{req.params.id}/favorite.rss?of=#{offset}"
+  epoch = toEpoch new Date()
+  url = "http://b.hatena.ne.jp/#{req.params.id}/favorite.rss?of=#{offset}&ts=#{epoch}"
   rss2timeline url, (timeline) ->
     res.send timeline
 
 app.get "/:id/bookmark", (req, res) ->
   offset = req.param('of') ? 0
-  url = "http://b.hatena.ne.jp/#{req.params.id}/rss?of=#{offset}"
+  epoch = toEpoch new Date()
+  url = "http://b.hatena.ne.jp/#{req.params.id}/rss?of=#{offset}&ts=#{epoch}"
   rss2timeline url, (timeline) ->
     res.send timeline
 
