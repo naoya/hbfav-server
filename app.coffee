@@ -63,15 +63,15 @@ toEpoch = (date) ->
 
 app.get "/:id", (req, res) ->
   offset = req.param('of') ? 0
-  epoch = toEpoch new Date()
-  url = "http://b.hatena.ne.jp/#{req.params.id}/favorite.rss?of=#{offset}&ts=#{epoch}"
+  # epoch = toEpoch new Date()
+  url = "http://b.hatena.ne.jp/#{req.params.id}/favorite.rss?of=#{offset}"
   rss2timeline url, (timeline) ->
     res.send timeline
 
 app.get "/:id/bookmark", (req, res) ->
   offset = req.param('of') ? 0
-  epoch = toEpoch new Date()
-  url = "http://b.hatena.ne.jp/#{req.params.id}/rss?of=#{offset}&ts=#{epoch}"
+  # epoch = toEpoch new Date()
+  url = "http://b.hatena.ne.jp/#{req.params.id}/rss?of=#{offset}"
   rss2timeline url, (timeline) ->
     res.send timeline
 
