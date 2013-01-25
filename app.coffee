@@ -45,7 +45,7 @@ app.configure "production", ->
   app.use express.errorHandler()
 
 rss2timeline = (url, cb) ->
-  parser = new xml2js.Parser()
+  parser = new xml2js.Parser(xml2js.defaults["0.1"])
   parser.addListener 'end', (result) ->
     cb new Timeline result
 
