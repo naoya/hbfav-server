@@ -20,6 +20,7 @@ class Timeline.Bookmark
     @comment     = item.description ? ""
     @count       = item['hatena:bookmarkcount']
     # @created_at  = new Date item['dc:date']
+    @datetime    = item['dc:date']
     @created_at  = prettyDate item['dc:date']
     @user        = new Timeline.User item['dc:creator']
 
