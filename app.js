@@ -102,7 +102,7 @@
     var offset, url, _ref;
 
     offset = (_ref = req.param('of')) != null ? _ref : 0;
-    url = "http://b.hatena.ne.jp/" + req.params.id + "/favorite.rss?of=" + offset;
+    url = "http://b.hatena.ne.jp/" + req.params.id + "/favorite.rss?of=" + offset + "&with_me=1";
     return rss2timeline(url, function(timeline) {
       return res.send(timeline);
     });
