@@ -99,10 +99,15 @@
   };
 
   app.get("/:id", function(req, res) {
-    var offset, url, _ref;
+    var offset, url;
 
-    offset = (_ref = req.param('of')) != null ? _ref : 0;
-    url = "http://b.hatena.ne.jp/" + req.params.id + "/favorite.rss?of=" + offset + "&with_me=1";
+    url = "http://b.hatena.ne.jp/" + req.params.id + "/favorite.rss?with_me=1";
+    if (req.param('until')) {
+      url += "&until=" + (req.param('until'));
+    } else if (offset = req.param('of')) {
+      url += "&of=" + (req.param('of'));
+    }
+    console.log(url);
     return rss2timeline(url, function(timeline) {
       return res.send(timeline);
     });

@@ -63,9 +63,15 @@ toEpoch = (date) ->
   parseInt date.getTime() / 1000.0
 
 app.get "/:id", (req, res) ->
-  offset = req.param('of') ? 0
-  # epoch = toEpoch new Date()
-  url = "http://b.hatena.ne.jp/#{req.params.id}/favorite.rss?of=#{offset}&with_me=1"
+  url = "http://b.hatena.ne.jp/#{req.params.id}/favorite.rss?with_me=1"
+  
+  if req.param('until')
+    url += "&until=#{req.param('until')}"
+  else if offset = req.param('of')
+    url += "&of=#{req.param('of')}"
+
+  console.log(url)
+    
   rss2timeline url, (timeline) ->
     res.send timeline
 
