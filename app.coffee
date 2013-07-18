@@ -23,6 +23,7 @@ class Timeline.Bookmark
     @datetime    = item['dc:date']
     @created_at  = prettyDate item['dc:date']
     @user        = new Timeline.User item['dc:creator']
+    @permalink   = item['@']['rdf:about']
 
 class Timeline.User
   constructor: (@name) ->

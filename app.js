@@ -38,6 +38,7 @@
       this.datetime = item['dc:date'];
       this.created_at = prettyDate(item['dc:date']);
       this.user = new Timeline.User(item['dc:creator']);
+      this.permalink = item['@']['rdf:about'];
     }
 
     return Bookmark;
