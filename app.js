@@ -113,6 +113,18 @@
     });
   });
 
+  app.get("/entrylist", function(req, res) {
+    var url;
+
+    url = "http://b.hatena.ne.jp/entrylist.rss";
+    return rss2timeline(url, function(timeline) {
+      _(timeline.bookmarks).each(function(bookmark) {
+        return bookmark.user = new Timeline.User("hatenabookmark");
+      });
+      return res.send(timeline);
+    });
+  });
+
   app.get("/:id", function(req, res) {
     var offset, url;
 
