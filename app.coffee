@@ -71,6 +71,13 @@ app.get "/hotentry", (req, res) ->
       bookmark.user = new Timeline.User "hatenabookmark"
     res.send timeline
 
+app.get "/entrylist", (req, res) ->
+  url = "http://b.hatena.ne.jp/entrylist.rss"
+  rss2timeline url, (timeline) ->
+    _(timeline.bookmarks).each (bookmark) ->
+      bookmark.user = new Timeline.User "hatenabookmark"
+    res.send timeline
+
 app.get "/:id", (req, res) ->
   url = "http://b.hatena.ne.jp/#{req.params.id}/favorite.rss?with_me=1"
   
