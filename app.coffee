@@ -27,7 +27,8 @@ class Timeline.Bookmark
 
 class Timeline.User
   constructor: (@name) ->
-    @profile_image_url = "http://www.st-hatena.com/users/" + @name.substr(0, 2) + "/#{@name}/profile.gif"
+    if @name?
+      @profile_image_url = "http://www.st-hatena.com/users/" + @name.substr(0, 2) + "/#{@name}/profile.gif"
 
 app = module.exports = express.createServer()
 app.configure ->
@@ -62,6 +63,13 @@ rss2timeline = (url, cb) ->
 
 toEpoch = (date) ->
   parseInt date.getTime() / 1000.0
+
+app.get "/hotentry", (req, res) ->
+  url = "http://b.hatena.ne.jp/hotentry.rss"
+  rss2timeline url, (timeline) ->
+    _(timeline.bookmarks).each (bookmark) ->
+      bookmark.user = new Timeline.User "hatenabookmark"
+    res.send timeline
 
 app.get "/:id", (req, res) ->
   url = "http://b.hatena.ne.jp/#{req.params.id}/favorite.rss?with_me=1"

@@ -48,7 +48,9 @@
   Timeline.User = (function() {
     function User(name) {
       this.name = name;
-      this.profile_image_url = "http://www.st-hatena.com/users/" + this.name.substr(0, 2) + ("/" + this.name + "/profile.gif");
+      if (this.name != null) {
+        this.profile_image_url = "http://www.st-hatena.com/users/" + this.name.substr(0, 2) + ("/" + this.name + "/profile.gif");
+      }
     }
 
     return User;
@@ -98,6 +100,18 @@
   toEpoch = function(date) {
     return parseInt(date.getTime() / 1000.0);
   };
+
+  app.get("/hotentry", function(req, res) {
+    var url;
+
+    url = "http://b.hatena.ne.jp/hotentry.rss";
+    return rss2timeline(url, function(timeline) {
+      _(timeline.bookmarks).each(function(bookmark) {
+        return bookmark.user = new Timeline.User("hatenabookmark");
+      });
+      return res.send(timeline);
+    });
+  });
 
   app.get("/:id", function(req, res) {
     var offset, url;
