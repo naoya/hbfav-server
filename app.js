@@ -120,7 +120,11 @@
   app.get("/entrylist", function(req, res) {
     var url;
 
-    url = "http://b.hatena.ne.jp/entrylist.rss";
+    if (req.param('category')) {
+      url = "http://b.hatena.ne.jp/entrylist/" + (req.param('category')) + ".rss";
+    } else {
+      url = "http://b.hatena.ne.jp/entrylist.rss";
+    }
     return rss2timeline(url, function(timeline) {
       _(timeline.bookmarks).each(function(bookmark) {
         return bookmark.user = new Timeline.User("hatenabookmark");

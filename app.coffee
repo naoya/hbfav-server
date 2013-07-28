@@ -75,7 +75,10 @@ app.get "/hotentry", (req, res) ->
     res.send timeline
 
 app.get "/entrylist", (req, res) ->
-  url = "http://b.hatena.ne.jp/entrylist.rss"
+  if req.param('category')
+    url = "http://b.hatena.ne.jp/entrylist/#{req.param('category')}.rss"
+  else
+    url = "http://b.hatena.ne.jp/entrylist.rss"
   rss2timeline url, (timeline) ->
     _(timeline.bookmarks).each (bookmark) ->
       bookmark.user = new Timeline.User "hatenabookmark"
