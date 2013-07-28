@@ -65,7 +65,10 @@ toEpoch = (date) ->
   parseInt date.getTime() / 1000.0
 
 app.get "/hotentry", (req, res) ->
-  url = "http://b.hatena.ne.jp/hotentry.rss"
+  if req.param('category')
+    url = "http://b.hatena.ne.jp/hotentry/#{req.param('category')}.rss"
+  else
+    url = "http://b.hatena.ne.jp/hotentry.rss"
   rss2timeline url, (timeline) ->
     _(timeline.bookmarks).each (bookmark) ->
       bookmark.user = new Timeline.User "hatenabookmark"
