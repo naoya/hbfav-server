@@ -3,6 +3,7 @@ xml2js  = require 'xml2js'
 _       = require "underscore"
 request = require "request"
 prettyDate = require "./pretty"
+$       = require "jquery"
 
 class Timeline
   constructor: (feed)->
@@ -24,6 +25,11 @@ class Timeline.Bookmark
     @created_at  = prettyDate item['dc:date']
     @user        = new Timeline.User item['dc:creator']
     @permalink   = item['@']['rdf:about']
+    @category    = item['dc:subject']
+
+    # console.log(item['content:encoded'])
+    if /class="entry-image"/.test(item['content:encoded'])
+      @thumbnail_url = $(item['content:encoded']).find('.entry-image').attr('src')
 
 class Timeline.User
   constructor: (@name) ->
