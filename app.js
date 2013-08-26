@@ -14,6 +14,13 @@
 
   $ = require("jquery");
 
+  if (process.env.NODETIME_ACCOUNT_KEY) {
+    require('nodetime').profile({
+      accountKey: process.env.NODETIME_ACCOUNT_KEY,
+      appName: 'hbfav-push-server'
+    });
+  }
+
   Timeline = (function() {
     function Timeline(feed) {
       this.title = feed.channel.title;
