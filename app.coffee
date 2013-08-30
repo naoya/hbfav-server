@@ -58,19 +58,21 @@ app.configure "development", ->
 app.configure "production", ->
   app.use express.errorHandler()
 
-rss2timeline = (url, cb) ->
+rss2timeline = (url, headers, cb) ->
   parser = new xml2js.Parser(xml2js.defaults["0.1"])
   parser.addListener 'end', (result) ->
     cb new Timeline result
 
-  request url, (error, response, body) ->
-    # console.log "[#{response.statusCode}] #{url}"
-    if not error and response.statusCode is 200
-      try
-        parser.parseString body
-      catch e
-        # console.log response.statusCode
-        console.log e
+  request
+    method:'GET',
+    uri:url,
+    headers:headers,
+    (error, response, body) ->
+      if not error and response.statusCode is 200
+        try
+          parser.parseString body
+        catch e
+          console.log e
 
 toEpoch = (date) ->
   parseInt date.getTime() / 1000.0
@@ -80,7 +82,7 @@ app.get "/hotentry", (req, res) ->
     url = "http://b.hatena.ne.jp/hotentry/#{req.param('category')}.rss"
   else
     url = "http://b.hatena.ne.jp/hotentry.rss"
-  rss2timeline url, (timeline) ->
+  rss2timeline url, {}, (timeline) ->
     _(timeline.bookmarks).each (bookmark) ->
       bookmark.user = new Timeline.User "hatenabookmark"
     res.send timeline
@@ -90,7 +92,7 @@ app.get "/entrylist", (req, res) ->
     url = "http://b.hatena.ne.jp/entrylist/#{req.param('category')}.rss"
   else
     url = "http://b.hatena.ne.jp/entrylist.rss"
-  rss2timeline url, (timeline) ->
+  rss2timeline url, {}, (timeline) ->
     _(timeline.bookmarks).each (bookmark) ->
       bookmark.user = new Timeline.User "hatenabookmark"
     res.send timeline
@@ -105,14 +107,14 @@ app.get "/:id", (req, res) ->
 
   console.log(url)
     
-  rss2timeline url, (timeline) ->
+  rss2timeline url, { "Cache-Control" : "no-cache" }, (timeline) ->
     res.send timeline
 
 app.get "/:id/bookmark", (req, res) ->
   offset = req.param('of') ? 0
   # epoch = toEpoch new Date()
   url = "http://b.hatena.ne.jp/#{req.params.id}/rss?of=#{offset}"
-  rss2timeline url, (timeline) ->
+  rss2timeline url, { "Cache-Control" : "no-cache" }, (timeline) ->
     res.send timeline
 
 app.listen process.env.PORT || 3000

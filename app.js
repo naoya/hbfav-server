@@ -17,7 +17,7 @@
   if (process.env.NODETIME_ACCOUNT_KEY) {
     require('nodetime').profile({
       accountKey: process.env.NODETIME_ACCOUNT_KEY,
-      appName: 'hbfav-push-server'
+      appName: 'hbfav-server'
     });
   }
 
@@ -89,14 +89,18 @@
     return app.use(express.errorHandler());
   });
 
-  rss2timeline = function(url, cb) {
+  rss2timeline = function(url, headers, cb) {
     var parser;
 
     parser = new xml2js.Parser(xml2js.defaults["0.1"]);
     parser.addListener('end', function(result) {
       return cb(new Timeline(result));
     });
-    return request(url, function(error, response, body) {
+    return request({
+      method: 'GET',
+      uri: url,
+      headers: headers
+    }, function(error, response, body) {
       var e;
 
       if (!error && response.statusCode === 200) {
@@ -122,7 +126,7 @@
     } else {
       url = "http://b.hatena.ne.jp/hotentry.rss";
     }
-    return rss2timeline(url, function(timeline) {
+    return rss2timeline(url, {}, function(timeline) {
       _(timeline.bookmarks).each(function(bookmark) {
         return bookmark.user = new Timeline.User("hatenabookmark");
       });
@@ -138,7 +142,7 @@
     } else {
       url = "http://b.hatena.ne.jp/entrylist.rss";
     }
-    return rss2timeline(url, function(timeline) {
+    return rss2timeline(url, {}, function(timeline) {
       _(timeline.bookmarks).each(function(bookmark) {
         return bookmark.user = new Timeline.User("hatenabookmark");
       });
@@ -156,7 +160,9 @@
       url += "&of=" + (req.param('of'));
     }
     console.log(url);
-    return rss2timeline(url, function(timeline) {
+    return rss2timeline(url, {
+      "Cache-Control": "no-cache"
+    }, function(timeline) {
       return res.send(timeline);
     });
   });
@@ -166,7 +172,9 @@
 
     offset = (_ref = req.param('of')) != null ? _ref : 0;
     url = "http://b.hatena.ne.jp/" + req.params.id + "/rss?of=" + offset;
-    return rss2timeline(url, function(timeline) {
+    return rss2timeline(url, {
+      "Cache-Control": "no-cache"
+    }, function(timeline) {
       return res.send(timeline);
     });
   });
