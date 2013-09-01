@@ -37,7 +37,7 @@
 
   Timeline.Bookmark = (function() {
     function Bookmark(item) {
-      var _ref;
+      var node, _ref;
 
       this.title = item.title;
       this.link = item.link;
@@ -49,8 +49,12 @@
       this.user = new Timeline.User(item['dc:creator']);
       this.permalink = item['@']['rdf:about'];
       this.category = item['dc:subject'];
-      if (/class="entry-image"/.test(item['content:encoded'])) {
-        this.thumbnail_url = $(item['content:encoded']).find('.entry-image').attr('src');
+      if (item['content:encoded']) {
+        node = $(item['content:encoded']);
+        this.description = node.find('p').text();
+        if (/class="entry-image"/.test(item['content:encoded'])) {
+          this.thumbnail_url = node.find('.entry-image').attr('src');
+        }
       }
     }
 

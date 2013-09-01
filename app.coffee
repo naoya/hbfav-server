@@ -32,14 +32,23 @@ class Timeline.Bookmark
     @permalink   = item['@']['rdf:about']
     @category    = item['dc:subject']
 
-    # console.log(item['content:encoded'])
-    if /class="entry-image"/.test(item['content:encoded'])
-      @thumbnail_url = $(item['content:encoded']).find('.entry-image').attr('src')
+    if item['content:encoded']
+      node = $(item['content:encoded'])
+
+      ## favorite.rss は description が comment のため
+      @description = node.find('p').text()
+      
+      if /class="entry-image"/.test(item['content:encoded'])
+        @thumbnail_url =
+          node.find('.entry-image').attr('src')
 
 class Timeline.User
   constructor: (@name) ->
     if @name?
-      @profile_image_url = "http://www.st-hatena.com/users/" + @name.substr(0, 2) + "/#{@name}/profile.gif"
+      @profile_image_url =
+        "http://www.st-hatena.com/users/" +
+        @name.substr(0, 2) +
+        "/#{@name}/profile.gif"
 
 app = module.exports = express.createServer()
 app.configure ->
