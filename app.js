@@ -14,7 +14,7 @@
 
   $ = require("jquery");
 
-  newrelic = require('./newrelic');
+  newrelic = require('newrelic');
 
   Timeline = (function() {
     function Timeline(feed) {
