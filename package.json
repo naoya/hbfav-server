@@ -8,9 +8,5 @@
     "underscore": ">= 0.0.1",
     "request": ">= 0.0.1",
     "jquery": ">= 0.0.1",
-    "nodetime": "~0.8.13"
-  },
-  "devDependencies": {
-    "newrelic": "~1.0.0"
   }
 }

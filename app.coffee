@@ -4,7 +4,7 @@ _       = require "underscore"
 request = require "request"
 prettyDate = require "./pretty"
 $       = require "jquery"
-# newrelic = require 'newrelic'
+newrelic = require './newrelic'
 
 class Timeline
   constructor: (feed)->
