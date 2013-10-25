@@ -4,11 +4,7 @@ _       = require "underscore"
 request = require "request"
 prettyDate = require "./pretty"
 $       = require "jquery"
-
-if process.env.NODETIME_ACCOUNT_KEY
-  require('nodetime').profile
-    accountKey: process.env.NODETIME_ACCOUNT_KEY,
-    appName: 'hbfav-server'
+newrelic = require 'newrelic'
 
 class Timeline
   constructor: (feed)->
