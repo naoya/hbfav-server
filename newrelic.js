@@ -8,11 +8,11 @@ exports.config = {
   /**
    * Array of application names.
    */
-  app_name : ['My Application'],
+  app_name : ['feed.hbfav.com'],
   /**
    * Your New Relic license key.
    */
-  license_key : 'license key here',
+  /* license_key : 'license key here', */
   logging : {
     /**
      * Level at which to log. 'trace' is most useful to New Relic when diagnosing
