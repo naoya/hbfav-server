@@ -3,15 +3,16 @@ xml2js  = require 'xml2js'
 _       = require "underscore"
 request = require "request"
 prettyDate = require "./pretty"
-$       = require "jquery"
-newrelic = require 'newrelic'
+jsdom   = require 'jsdom'
+window  = jsdom.jsdom().parentWindow
+$       = require("jquery/dist/jquery")(window)
 
 class Timeline
   constructor: (feed)->
     @title       = feed.channel.title
     @link        = feed.channel.link
     @description = feed.channel.description
-    @bookmarks   = _(feed.item).map (item) ->
+    @bookmarks   = _.map feed.item, (item) ->
       new Timeline.Bookmark (item)
 
 class Timeline.Bookmark
@@ -21,7 +22,6 @@ class Timeline.Bookmark
     @favicon_url = "http://favicon.st-hatena.com/?url=#{@link}"
     @comment     = item.description ? ""
     @count       = item['hatena:bookmarkcount']
-    # @created_at  = new Date item['dc:date']
     @datetime    = item['dc:date']
     @created_at  = prettyDate item['dc:date']
     @user        = new Timeline.User item['dc:creator']
@@ -29,14 +29,14 @@ class Timeline.Bookmark
     @category    = item['dc:subject']
 
     if item['content:encoded']
-      node = $(item['content:encoded'])
+      element = $(item['content:encoded'])
 
       ## favorite.rss は description が comment のため
-      @description = node.find('p').text()
+      @description = element.find('p').text()
       
       if /class="entry-image"/.test(item['content:encoded'])
         @thumbnail_url =
-          node.find('.entry-image').attr('src')
+          element.find('.entry-image').attr('src')
 
 class Timeline.User
   constructor: (@name) ->
@@ -63,13 +63,14 @@ app.configure "production", ->
 rss2timeline = (url, headers, cb) ->
   parser = new xml2js.Parser(xml2js.defaults["0.1"])
   parser.addListener 'end', (result) ->
-    cb new Timeline result
+    timeline = new Timeline(result)
+    return cb(timeline)
 
   request
     method:'GET',
     uri:url,
     headers:headers,
-    timeout:15 * 1000 # 15 sec
+    timeout:20 * 1000 # 20 sec
     (error, response, body) ->
       if error
         console.log "[error] #{error}: #{url}"
@@ -89,6 +90,7 @@ app.get "/hotentry", (req, res) ->
   else
     url = "http://b.hatena.ne.jp/hotentry.rss"
   rss2timeline url, {}, (timeline) ->
+    "callback: #{url}"
     _(timeline.bookmarks).each (bookmark) ->
       bookmark.user = new Timeline.User "hatenabookmark"
     res.send timeline
