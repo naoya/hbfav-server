@@ -110,8 +110,6 @@ app.get "/:id", (req, res) ->
   else if offset = req.param('of')
     url += "&of=#{req.param('of')}"
 
-  console.log(url)
-    
   rss2timeline url, { "Cache-Control" : "no-cache" }, (timeline) ->
     res.send timeline
 
