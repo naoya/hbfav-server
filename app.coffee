@@ -72,9 +72,10 @@ rss2timeline = (url, headers, cb) ->
     method:'GET',
     uri:url,
     headers:headers,
+    timeout:15 * 1000 # 15 sec
     (error, response, body) ->
       if error
-        console.log "[error] #{response.statusCode}: #{error}"
+        console.log "[error] #{error}: #{url}"
         
       if not error and response.statusCode is 200
         try

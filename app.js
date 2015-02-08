@@ -96,11 +96,12 @@
     return request({
       method: 'GET',
       uri: url,
-      headers: headers
+      headers: headers,
+      timeout: 15 * 1000
     }, function(error, response, body) {
       var e;
       if (error) {
-        console.log("[error] " + response.statusCode + ": " + error);
+        console.log("[error] " + error + ": " + url);
       }
       if (!error && response.statusCode === 200) {
         try {
