@@ -71,7 +71,7 @@ rss2timeline = (url, headers, cb) ->
   request
     method:'GET',
     uri:url,
-    headers:headers,
+    headers:_.extend({'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.111 Safari/537.36'}, headers),
     (error, response, body) ->
       if not error and response.statusCode is 200
         try
