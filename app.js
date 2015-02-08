@@ -101,6 +101,9 @@
       }, headers)
     }, function(error, response, body) {
       var e;
+      if (error) {
+        console.log("[error] " + response.statusCode + ": " + error);
+      }
       if (!error && response.statusCode === 200) {
         try {
           return parser.parseString(body);
