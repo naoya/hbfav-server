@@ -69,7 +69,7 @@ rss2timeline = (url, headers, cb) ->
   request
     method:'GET',
     uri:url,
-    headers:headers,
+    headers:_.extend(headers, 'User-Agent': 'HBFav/0.0.1'),
     timeout:20 * 1000 # 20 sec
     (error, response, body) ->
       if error
